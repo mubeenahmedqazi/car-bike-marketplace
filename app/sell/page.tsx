@@ -1,8 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Car, Bike, Upload, AlertCircle, Shield, CheckCircle } from "lucide-react"
 
 export default function SellCarPage() {
+  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
   const [form, setForm] = useState({
     title: "",
     vehicleType: "Car",
@@ -13,41 +19,81 @@ export default function SellCarPage() {
     price: "",
     city: "",
     description: "",
-    transmission: "Automatic",
-    fuelType: "Petrol",
-    condition: "Used",
+    transmission: "Automatic",  // CHANGED: Capitalized
+    fuelType: "Petrol",         // CHANGED: Capitalized
+    condition: "Used",          // CHANGED: Capitalized
     phone: "",
     images: [] as File[]
   })
-
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [currentSection, setCurrentSection] = useState(0)
   
+  // Check authentication on mount
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch('/api/auth/verify', {
+        method: 'GET',
+        credentials: 'include',
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setUser(data.user)
+        setIsAuthenticated(true)
+        
+        // Pre-fill user data in form
+        setForm(prev => ({
+          ...prev,
+          phone: data.user.phone,
+          city: data.user.city
+        }))
+      } else {
+        // Redirect to signin if not authenticated
+        router.push('/signin?redirect=/sell')
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error)
+      router.push('/signin?redirect=/sell')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Mock brands for dropdown
   const vehicleBrands = {
-    Car: ["Toyota", "Honda", "Suzuki", "Mercedes", "BMW", "Audi", "Hyundai", "Kia", "Ford", "Nissan", "Other"],
+    Car: ["Toyota", "Honda", "Suzuki", "Mercedes", "BMW", "Audi", "Hyundai", "Kia", "Ford", "Nissan","Changan", "Other"],
     Bike: ["Honda", "Yamaha", "Suzuki", "Kawasaki", "Harley-Davidson", "Other"]
   }
 
-  const transmissions = ["Automatic", "Manual", "Semi-Automatic"]
-  const fuelTypes = ["Petrol", "Diesel", "Electric", "Hybrid", "CNG"]
-  const conditions = ["New", "Used", "Reconditioned"]
+  const transmissions = ["Automatic", "Manual", "Semi-Automatic", "CVT", "Other"]  // CHANGED: Capitalized
+  const fuelTypes = ["Petrol", "Diesel", "Electric", "Hybrid", "CNG", "LPG", "Other"]  // CHANGED: Capitalized
+  const conditions = ["New", "Used", "Reconditioned"]  // CHANGED: Capitalized
   const cities = ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta", "Other"]
 
   // Calculate form completion progress
-  useEffect(() => {
-    let filledFields = 0
-    const totalFields = 13 // Total number of form fields
-    
-    Object.values(form).forEach(value => {
-      if (value && value.toString().trim() !== "" && !(Array.isArray(value) && value.length === 0)) {
-        filledFields++
-      }
-    })
-    
-    setProgress(Math.round((filledFields / totalFields) * 100))
-  }, [form])
+// Calculate form completion progress - SIMPLE FIX
+useEffect(() => {
+  if (!isAuthenticated) return
+  
+  let filledFields = 0
+  const totalFields = 13
+  
+  Object.values(form).forEach(value => {
+    if (value && value.toString().trim() !== "" && !(Array.isArray(value) && value.length === 0)) {
+      filledFields++
+    }
+  })
+  
+  // Cap at 100%
+  const percentage = Math.round((filledFields / totalFields) * 100)
+  setProgress(Math.min(percentage, 100))
+  
+}, [form, isAuthenticated])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -77,6 +123,12 @@ export default function SellCarPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!isAuthenticated) {
+      router.push('/signin?redirect=/sell')
+      return
+    }
+    
     setIsSubmitting(true)
     
     try {
@@ -94,6 +146,7 @@ export default function SellCarPage() {
       })
       
       console.log("📤 Submitting form...")
+      console.log("User:", user)
       
       // Add images (all with same field name 'images')
       form.images.forEach((image) => {
@@ -110,17 +163,18 @@ export default function SellCarPage() {
         }
       }
       
-      // Send to API
+      // Send to API with authentication
       const res = await fetch("/api/ads", {
         method: "POST",
         body: formData,
+        credentials: 'include', // Include cookies for authentication
       })
       
       const data = await res.json()
       console.log("API Response:", data)
       
       if (!res.ok) {
-        throw new Error(data.error || `HTTP ${res.status}: ${data.message || "Unknown error"}`)
+        throw new Error(data.message || data.error || `HTTP ${res.status}`)
       }
       
       if (data.success) {
@@ -136,12 +190,12 @@ export default function SellCarPage() {
           year: "",
           mileage: "",
           price: "",
-          city: "",
+          city: user?.city || "",
           description: "",
-          transmission: "Automatic",
-          fuelType: "Petrol",
-          condition: "Used",
-          phone: "",
+          transmission: "Automatic",  // CHANGED: Capitalized
+          fuelType: "Petrol",         // CHANGED: Capitalized
+          condition: "Used",          // CHANGED: Capitalized
+          phone: user?.phone || "",
           images: []
         })
         
@@ -149,9 +203,12 @@ export default function SellCarPage() {
           alert(`Ad posted successfully! ID: ${data.adId}`)
           setIsSubmitting(false)
           document.querySelector(".success-animation")?.classList.remove("active")
+          
+          // Redirect to dashboard
+          router.push('/dashboard')
         }, 1500)
       } else {
-        alert("Error: " + (data.details?.map((d: any) => d.message)?.join(", ") || data.error || "Unknown error"))
+        alert("Error: " + (data.message || data.error || "Unknown error"))
         setIsSubmitting(false)
       }
     } catch (error: any) {
@@ -178,8 +235,22 @@ export default function SellCarPage() {
 
   // Check if form is valid before allowing submission
   const isFormValid = () => {
+    if (!isAuthenticated) return false
+    
     const requiredFields = ['title', 'brand', 'model', 'year', 'price', 'city', 'description', 'phone', 'condition']
     return requiredFields.every(field => form[field as keyof typeof form]?.toString().trim() !== '')
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null // Will redirect in useEffect
   }
 
   return (
@@ -189,12 +260,29 @@ export default function SellCarPage() {
         <div className="success-animation fixed inset-0 flex items-center justify-center bg-black/70 z-50 opacity-0 pointer-events-none transition-opacity duration-500">
           <div className="bg-white rounded-2xl p-10 text-center max-w-md">
             <div className="checkmark-animate w-24 h-24 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
-              <svg className="w-14 h-14 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
-              </svg>
+              <CheckCircle className="w-14 h-14 text-green-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Ad Posted Successfully!</h3>
-            <p className="text-gray-600">Your vehicle listing is now live. Buyers can contact you soon.</p>
+            <p className="text-gray-600">Your vehicle listing is now pending approval.</p>
+          </div>
+        </div>
+
+        {/* User Info Bar */}
+        <div className="mb-6 bg-gradient-to-r from-red-50 to-pink-50 border border-red-100 rounded-xl p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <Shield className="text-red-600" size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900">Hello, {user?.name}!</h3>
+                <p className="text-gray-600">Your ad will be posted from {user?.city}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-600">Account Status</p>
+              <p className="font-semibold text-green-600">✓ Verified User</p>
+            </div>
           </div>
         </div>
 
@@ -202,11 +290,11 @@ export default function SellCarPage() {
         <div className="mb-10">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Post Your Vehicle Ad</h1>
-            <div className="text-lg font-semibold text-orange-600">{progress}% Complete</div>
+            <div className="text-lg font-semibold text-red-600">{progress}% Complete</div>
           </div>
           <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-orange-500 to-orange-600 transition-all duration-500 ease-out"
+              className="h-full bg-gradient-to-r from-red-500 to-red-600 transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -222,12 +310,12 @@ export default function SellCarPage() {
               <button
                 key={index}
                 className={`flex-1 py-5 text-center font-medium text-lg transition-all duration-300 ${currentSection === index 
-                  ? "bg-orange-50 text-orange-700 border-b-2 border-orange-600" 
+                  ? "bg-red-50 text-red-700 border-b-2 border-red-600" 
                   : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}
                 onClick={() => setCurrentSection(index)}
               >
                 <span className="flex items-center justify-center gap-2">
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center ${currentSection === index ? "bg-orange-600 text-white" : "bg-gray-200 text-gray-600"}`}>
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center ${currentSection === index ? "bg-red-600 text-white" : "bg-gray-200 text-gray-600"}`}>
                     {index + 1}
                   </span>
                   {tab}
@@ -253,7 +341,7 @@ export default function SellCarPage() {
                       </label>
                       <input
                         name="title"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none"
                         placeholder="e.g., Honda Civic 2020 1.8L Oriel White - Excellent Condition"
                         value={form.title}
                         onChange={handleChange}
@@ -270,24 +358,24 @@ export default function SellCarPage() {
                         <button
                           type="button"
                           className={`flex-1 py-4 rounded-xl border-2 text-center font-medium transition-all duration-300 ${form.vehicleType === "Car" 
-                            ? "border-orange-500 bg-orange-50 text-orange-700" 
+                            ? "border-red-500 bg-red-50 text-red-700" 
                             : "border-gray-300 hover:border-gray-400 text-gray-700"}`}
                           onClick={() => setForm({...form, vehicleType: "Car"})}
                         >
                           <div className="flex flex-col items-center">
-                            <span className="text-2xl mb-1">🚗</span>
+                            <Car className="w-8 h-8 mb-2" />
                             <span>Car</span>
                           </div>
                         </button>
                         <button
                           type="button"
                           className={`flex-1 py-4 rounded-xl border-2 text-center font-medium transition-all duration-300 ${form.vehicleType === "Bike" 
-                            ? "border-orange-500 bg-orange-50 text-orange-700" 
+                            ? "border-red-500 bg-red-50 text-red-700" 
                             : "border-gray-300 hover:border-gray-400 text-gray-700"}`}
                           onClick={() => setForm({...form, vehicleType: "Bike"})}
                         >
                           <div className="flex flex-col items-center">
-                            <span className="text-2xl mb-1">🏍️</span>
+                            <Bike className="w-8 h-8 mb-2" />
                             <span>Bike</span>
                           </div>
                         </button>
@@ -312,13 +400,13 @@ export default function SellCarPage() {
                       </label>
                       <select
                         name="brand"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none appearance-none bg-white"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none appearance-none bg-white"
                         value={form.brand}
                         onChange={handleChange}
                         required
                       >
                         <option value="">Select Brand</option>
-                        {vehicleBrands[form.vehicleType].map(brand => (
+                        {vehicleBrands[form.vehicleType as keyof typeof vehicleBrands].map(brand => (
                           <option key={brand} value={brand}>{brand}</option>
                         ))}
                       </select>
@@ -330,7 +418,7 @@ export default function SellCarPage() {
                       </label>
                       <input
                         name="model"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none"
                         placeholder="e.g., Civic, Corolla, City"
                         value={form.model}
                         onChange={handleChange}
@@ -347,7 +435,7 @@ export default function SellCarPage() {
                         type="number"
                         min="1990"
                         max={new Date().getFullYear() + 1}
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none"
                         placeholder="e.g., 2020"
                         value={form.year}
                         onChange={handleChange}
@@ -362,7 +450,7 @@ export default function SellCarPage() {
                       <input
                         name="mileage"
                         type="number"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none"
                         placeholder="e.g., 50000"
                         value={form.mileage}
                         onChange={handleChange}
@@ -375,7 +463,7 @@ export default function SellCarPage() {
                       </label>
                       <select
                         name="transmission"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none appearance-none bg-white"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none appearance-none bg-white"
                         value={form.transmission}
                         onChange={handleChange}
                       >
@@ -391,7 +479,7 @@ export default function SellCarPage() {
                       </label>
                       <select
                         name="fuelType"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none appearance-none bg-white"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none appearance-none bg-white"
                         value={form.fuelType}
                         onChange={handleChange}
                       >
@@ -407,7 +495,7 @@ export default function SellCarPage() {
                       </label>
                       <select
                         name="condition"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none appearance-none bg-white"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none appearance-none bg-white"
                         value={form.condition}
                         onChange={handleChange}
                         required
@@ -427,7 +515,7 @@ export default function SellCarPage() {
                         <input
                           name="price"
                           type="number"
-                          className="w-full pl-12 pr-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none text-lg font-semibold"
+                          className="w-full pl-12 pr-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none text-lg font-semibold"
                           placeholder="Enter price"
                           value={form.price}
                           onChange={handleChange}
@@ -454,7 +542,7 @@ export default function SellCarPage() {
                       </label>
                       <select
                         name="city"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none appearance-none bg-white"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none appearance-none bg-white"
                         value={form.city}
                         onChange={handleChange}
                         required
@@ -473,7 +561,7 @@ export default function SellCarPage() {
                       <input
                         name="phone"
                         type="tel"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none"
                         placeholder="03XX-XXXXXXX"
                         value={form.phone}
                         onChange={handleChange}
@@ -499,7 +587,7 @@ export default function SellCarPage() {
                       <span className="text-sm font-normal text-gray-500 ml-2">(Up to 10 images)</span>
                     </label>
                     
-                    <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-orange-400 transition-all duration-300">
+                    <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-red-400 transition-all duration-300">
                       <input
                         type="file"
                         multiple
@@ -509,7 +597,9 @@ export default function SellCarPage() {
                         id="image-upload"
                       />
                       <label htmlFor="image-upload" className="cursor-pointer block">
-                        <div className="text-5xl mb-4">📸</div>
+                        <div className="text-5xl mb-4">
+                          <Upload className="w-16 h-16 mx-auto text-gray-400" />
+                        </div>
                         <p className="text-xl font-medium text-gray-700 mb-2">Click to upload photos</p>
                         <p className="text-gray-500">Or drag and drop images here</p>
                         <p className="text-sm text-gray-400 mt-4">High-quality photos get more attention</p>
@@ -556,7 +646,7 @@ export default function SellCarPage() {
                     <textarea
                       name="description"
                       rows={6}
-                      className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 outline-none resize-none"
+                      className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 outline-none resize-none"
                       placeholder="Describe your vehicle in detail. Include features, condition, reason for selling, any issues, service history, etc."
                       value={form.description}
                       onChange={handleChange}
@@ -588,7 +678,7 @@ export default function SellCarPage() {
                 <button
                   type="button"
                   onClick={nextSection}
-                  className="px-10 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Continue →
                 </button>
@@ -596,7 +686,7 @@ export default function SellCarPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting || !isFormValid()}
-                  className="px-10 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-3"
+                  className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-3"
                 >
                   {isSubmitting ? (
                     <>
@@ -604,10 +694,7 @@ export default function SellCarPage() {
                       Posting Ad...
                     </>
                   ) : (
-                    <>
-                      
-                      Post Ad Now
-                    </>
+                    "Post Ad Now"
                   )}
                 </button>
               )}
@@ -620,19 +707,25 @@ export default function SellCarPage() {
           <h3 className="text-2xl font-bold text-gray-900 mb-6">Tips for a Successful Ad</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="text-3xl mb-4">📷</div>
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <Upload className="text-blue-600" size={24} />
+              </div>
               <h4 className="font-bold text-gray-800 mb-2">Quality Photos</h4>
               <p className="text-gray-600">Take clear photos in good lighting from multiple angles.</p>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="text-3xl mb-4">📝</div>
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <AlertCircle className="text-green-600" size={24} />
+              </div>
               <h4 className="font-bold text-gray-800 mb-2">Honest Description</h4>
               <p className="text-gray-600">Mention any issues upfront to build trust with buyers.</p>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="text-3xl mb-4">💰</div>
-              <h4 className="font-bold text-gray-800 mb-2">Fair Pricing</h4>
-              <p className="text-gray-600">Research similar vehicles to set a competitive price.</p>
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Shield className="text-purple-600" size={24} />
+              </div>
+              <h4 className="font-bold text-gray-800 mb-2">Safe Transaction</h4>
+              <p className="text-gray-600">Meet in public places and verify payments carefully.</p>
             </div>
           </div>
         </div>
@@ -656,7 +749,7 @@ export default function SellCarPage() {
         
         .input-active {
           transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(249, 115, 22, 0.1);
+          box-shadow: 0 10px 25px rgba(239, 68, 68, 0.1);
         }
         
         .checkmark-animate {

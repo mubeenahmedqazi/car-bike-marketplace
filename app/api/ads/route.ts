@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { connectDB } from "@/lib/mongodb"
 import Ad from "@/models/Ad"
 import { uploadToCloudinary } from "@/lib/cloudinary"
+import { getAuthUser } from "@/lib/auth"
 
 // =======================
 // GET ALL ADS
@@ -18,12 +19,12 @@ export async function GET(request: Request) {
     const category = searchParams.get("category")
     const brand = searchParams.get("brand")
     const city = searchParams.get("city")
-    const search = searchParams.get("search") // ADDED
-    const sort = searchParams.get("sort") || "newest" // ADDED
-    const minPrice = searchParams.get("minPrice") // ADDED
-    const maxPrice = searchParams.get("maxPrice") // ADDED
-    const minYear = searchParams.get("minYear") // ADDED
-    const maxYear = searchParams.get("maxYear") // ADDED
+    const search = searchParams.get("search")
+    const sort = searchParams.get("sort") || "newest"
+    const minPrice = searchParams.get("minPrice")
+    const maxPrice = searchParams.get("maxPrice")
+    const minYear = searchParams.get("minYear")
+    const maxYear = searchParams.get("maxYear")
 
     console.log("📥 GET /api/ads params:", {
       type,
@@ -54,7 +55,6 @@ export async function GET(request: Request) {
       query.city = new RegExp(city, "i")
     }
 
-    // ADDED: Search functionality
     if (search) {
       query.$or = [
         { title: new RegExp(search, "i") },
@@ -65,14 +65,12 @@ export async function GET(request: Request) {
       ]
     }
 
-    // ADDED: Price range filter
     if (minPrice || maxPrice) {
       query.price = {}
       if (minPrice) query.price.$gte = Number(minPrice)
       if (maxPrice) query.price.$lte = Number(maxPrice)
     }
 
-    // ADDED: Year range filter
     if (minYear || maxYear) {
       query.year = {}
       if (minYear) query.year.$gte = Number(minYear)
@@ -81,7 +79,6 @@ export async function GET(request: Request) {
 
     let sortOptions: any = { createdAt: -1 }
 
-    // UPDATED: Sorting based on sort parameter
     if (sort === "oldest") {
       sortOptions = { createdAt: 1 }
     } else if (sort === "price_low") {
@@ -147,6 +144,21 @@ export async function POST(request: Request) {
   try {
     await connectDB()
 
+    // Get authenticated user
+    const user = await getAuthUser(request as any)
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "Authentication required" },
+        { status: 401 }
+      )
+    }
+
+    console.log("📝 Creating ad for user:", {
+      email: user.email,
+      name: user.name,
+      id: user._id
+    })
+
     const formData = await request.formData()
 
     const title = formData.get("title") as string
@@ -189,6 +201,7 @@ export async function POST(request: Request) {
       )
     }
 
+    // Create ad with seller info
     const ad = await Ad.create({
       title,
       vehicleType,
@@ -209,6 +222,18 @@ export async function POST(request: Request) {
       isVerified: false,
       isFeatured: false,
       isSponsored: false,
+      
+      // CRITICAL: Save seller info
+      sellerEmail: user.email.toLowerCase(), // Store lowercase
+      sellerName: user.name || "",
+    })
+
+    console.log("✅ Ad created successfully:", {
+      adId: ad._id,
+      title: ad.title,
+      sellerEmail: ad.sellerEmail,
+      sellerName: ad.sellerName,
+      hasSellerEmail: !!ad.sellerEmail
     })
 
     return NextResponse.json(
@@ -216,13 +241,15 @@ export async function POST(request: Request) {
         success: true,
         adId: ad._id.toString(),
         message: "Ad created successfully",
+        sellerEmail: ad.sellerEmail,
+        sellerName: ad.sellerName
       },
       { status: 201 }
     )
   } catch (error: any) {
     console.error("❌ POST /api/ads ERROR:", error)
     return NextResponse.json(
-      { success: false, message: "Failed to create ad" },
+      { success: false, message: error.message || "Failed to create ad" },
       { status: 500 }
     )
   }

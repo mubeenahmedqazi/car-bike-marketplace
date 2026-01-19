@@ -39,10 +39,58 @@ export default function Header() {
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   
+  // User authentication state
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userName, setUserName] = useState("")
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+  
   // Refs for click outside detection
   const searchRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
+
+  // Check authentication status
+  const checkAuth = async () => {
+    try {
+      setIsCheckingAuth(true)
+      const response = await fetch('/api/auth/verify', {
+        credentials: 'include'
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
+          setIsLoggedIn(true)
+          setUserName(data.user?.name || "User")
+        } else {
+          setIsLoggedIn(false)
+          setUserName("")
+        }
+      } else {
+        setIsLoggedIn(false)
+        setUserName("")
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error)
+      setIsLoggedIn(false)
+      setUserName("")
+    } finally {
+      setIsCheckingAuth(false)
+    }
+  }
+
+  // Check auth on mount and when route changes
+  useEffect(() => {
+    checkAuth()
+    
+    // Listen for route changes
+    const handleRouteChange = () => {
+      checkAuth()
+    }
+    
+    window.addEventListener('focus', checkAuth)
+    return () => window.removeEventListener('focus', checkAuth)
+  }, [])
 
   // Handle scroll for sticky header
   useEffect(() => {
@@ -196,14 +244,39 @@ export default function Header() {
     return count.toString()
   }
 
-  const handleLogout = () => {
-    // Implement logout logic here
-    console.log('Logging out...')
-    setIsUserMenuOpen(false)
-    // router.push('/login')
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      
+      if (response.ok) {
+        // Clear local state
+        setIsLoggedIn(false)
+        setUserName("")
+        setIsUserMenuOpen(false)
+        
+        // Redirect to home
+        router.push('/')
+        router.refresh()
+      }
+    } catch (error) {
+      console.error("Logout error:", error)
+      // Still clear local state on error
+      setIsLoggedIn(false)
+      setUserName("")
+      setIsUserMenuOpen(false)
+      router.push('/')
+    }
   }
 
   const handleSellClick = () => {
+    if (!isLoggedIn) {
+      // Redirect to signin with redirect parameter
+      router.push('/signin?redirect=/sell')
+      return
+    }
     router.push('/sell')
   }
 
@@ -328,16 +401,7 @@ export default function Header() {
               
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
-                <Link 
-                  href="/" 
-                  className="text-gray-700 hover:text-orange-600 font-medium transition-colors relative group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Home size={18} />
-                    <span>Home</span>
-                  </div>
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
-                </Link>
+                
                 
                 <Link 
                   href="/buy" 
@@ -376,47 +440,82 @@ export default function Header() {
                     <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 animate-fadeIn">
                       {/* User Info */}
                       <div className="px-4 py-3 border-b border-gray-100">
-                        <p className="font-semibold text-gray-900">Welcome, Guest!</p>
-                        <p className="text-sm text-gray-500">Sign in to access your account</p>
+                        {isLoggedIn ? (
+                          <>
+                            <p className="font-semibold text-gray-900">Welcome, {userName}!</p>
+                            <p className="text-sm text-gray-500">Manage your account</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="font-semibold text-gray-900">Welcome, Guest!</p>
+                            <p className="text-sm text-gray-500">Sign in to access your account</p>
+                          </>
+                        )}
                       </div>
                       
                       {/* Menu Items */}
                       <div className="py-2">
-                        <Link 
-                          href="/login" 
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <User size={18} />
-                          <span>Sign In / Register</span>
-                        </Link>
-                        
-                        <Link 
-                          href="/dashboard" 
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <TrendingUp size={18} />
-                          <span>My Dashboard</span>
-                        </Link>
-                        
-                        <Link 
-                          href="/my-ads" 
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <FileText size={18} />
-                          <span>My Ads</span>
-                        </Link>
-                        
-                        <Link 
-                          href="/saved" 
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <Heart size={18} />
-                          <span>Saved Vehicles</span>
-                        </Link>
+                        {!isLoggedIn ? (
+                          // NOT LOGGED IN - Show Sign In / Register
+                          <>
+                            <Link 
+                              href="/signin" 
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
+                              onClick={() => setIsUserMenuOpen(false)}
+                            >
+                              <User size={18} />
+                              <span>Sign In</span>
+                            </Link>
+                            
+                            <Link 
+                              href="/signup" 
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
+                              onClick={() => setIsUserMenuOpen(false)}
+                            >
+                              <User size={18} />
+                              <span>Register</span>
+                            </Link>
+                          </>
+                        ) : (
+                          // LOGGED IN - Show User Options
+                          <>
+                            <Link 
+                              href="/my-ads" 
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
+                              onClick={() => setIsUserMenuOpen(false)}
+                            >
+                              <FileText size={18} />
+                              <span>My Ads</span>
+                            </Link>
+                            
+                            <Link 
+                              href="/dashboard" 
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
+                              onClick={() => setIsUserMenuOpen(false)}
+                            >
+                              <TrendingUp size={18} />
+                              <span>My Dashboard</span>
+                            </Link>
+                            
+                            <Link 
+                              href="/my-profile" 
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
+                              onClick={() => setIsUserMenuOpen(false)}
+                            >
+                              <User size={18} />
+                              <span>My Profile</span>
+                            </Link>
+                            
+                            <Link 
+                              href="/saved" 
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
+                              onClick={() => setIsUserMenuOpen(false)}
+                            >
+                              <Heart size={18} />
+                              <span>Saved Vehicles</span>
+                            </Link>
+                          </>
+                        )}
                       </div>
                       
                       {/* Help & Logout */}
@@ -430,13 +529,15 @@ export default function Header() {
                           <span>Help Center</span>
                         </Link>
                         
-                        <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-red-600 transition-colors text-left"
-                        >
-                          <LogOut size={18} />
-                          <span>Sign Out</span>
-                        </button>
+                        {isLoggedIn && (
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-red-600 transition-colors text-left"
+                          >
+                            <LogOut size={18} />
+                            <span>Sign Out</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}
@@ -586,16 +687,86 @@ export default function Header() {
                       Buy Vehicle
                     </Link>
                     
-                    <Link 
-                      href="/sell" 
-                      className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                    <button
+                      onClick={() => {
+                        if (!isLoggedIn) {
+                          router.push('/signin?redirect=/sell')
+                        } else {
+                          router.push('/sell')
+                        }
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium text-left"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                       </svg>
                       Sell Vehicle
-                    </Link>
+                    </button>
+
+                    {/* User Menu for Mobile */}
+                    <div className="border-t border-gray-100 pt-4 mt-4">
+                      {isLoggedIn ? (
+                        <>
+                          <div className="px-3 py-2 mb-3">
+                            <p className="font-semibold text-gray-900">Welcome, {userName}!</p>
+                          </div>
+                          <Link 
+                            href="/my-ads" 
+                            className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <FileText size={20} />
+                            My Ads
+                          </Link>
+                          <Link 
+                            href="/dashboard" 
+                            className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <TrendingUp size={20} />
+                            My Dashboard
+                          </Link>
+                          <Link 
+                            href="/my-profile" 
+                            className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <User size={20} />
+                            My Profile
+                          </Link>
+                          <button
+                            onClick={() => {
+                              handleLogout()
+                              setIsMobileMenuOpen(false)
+                            }}
+                            className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-red-600 font-medium text-left"
+                          >
+                            <LogOut size={20} />
+                            Sign Out
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <Link 
+                            href="/signin" 
+                            className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <User size={20} />
+                            Sign In
+                          </Link>
+                          <Link 
+                            href="/signup" 
+                            className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl text-gray-700 font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <User size={20} />
+                            Register
+                          </Link>
+                        </>
+                      )}
+                    </div>
 
                     {/* Popular Brands */}
                     <div className="border-t border-gray-100 pt-4 mt-4">
@@ -627,22 +798,24 @@ export default function Header() {
                 </div>
                 
                 <div className="space-y-4 pt-6 border-t border-gray-100">
-                  <div className="space-y-2">
-                    <Link 
-                      href="/login"
-                      className="block w-full py-3 text-center bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg transition-shadow"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Sign In
-                    </Link>
-                    
-                    <div className="text-center text-sm text-gray-500">
-                      New to AutoBazaar?{' '}
-                      <Link href="/register" className="text-orange-600 font-medium">
-                        Create Account
+                  {!isLoggedIn && (
+                    <div className="space-y-2">
+                      <Link 
+                        href="/signin"
+                        className="block w-full py-3 text-center bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg transition-shadow"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Sign In
                       </Link>
+                      
+                      <div className="text-center text-sm text-gray-500">
+                        New to AutoBazaar?{' '}
+                        <Link href="/signup" className="text-orange-600 font-medium">
+                          Create Account
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   
                   <div className="text-center text-xs text-gray-400">
                     © {new Date().getFullYear()} AutoBazaar. All rights reserved.

@@ -1,23 +1,29 @@
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 import "./globals.css"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 
-export const metadata = {
-  title: "CAR-BIKE MARKETPLACE - Pakistan's #1 Auto Platform",
-  description: "Buy and sell cars, bikes, SUVs, trucks in Pakistan. Trusted marketplace with verified sellers and secure transactions.",
-  // Minimal favicon setup
-  icons: {
-    icon: "LOGO.png",
-  },
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "CAR-BIKE MARKETPLACE",
+  description: "Buy and sell cars and bikes",
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, fontFamily: "Arial, sans-serif" }}>
+      <body className={inter.className}>
         <Header />
-        <main>{children}</main>
-        
+        <main className="min-h-screen">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   )

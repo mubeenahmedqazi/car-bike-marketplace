@@ -3,11 +3,10 @@
 import AdsSection from "../components/AdsSection"
 import CommentsSection from "../components/Commentsection"
 import { Car, Bike, Shield, TrendingUp, Zap, Users } from "lucide-react"
-import Footer from "@/components/Footer"
 
 export default function HomePage() {
   return (
-    <div className="bg-gray-50 max-h-screen">
+    <div className="bg-gray-50">
       {/* Hero Section with Image Slideshow */}
       <div className="relative text-white overflow-hidden h-[500px] md:h-[600px]">
         {/* Background Images Slideshow */}
@@ -79,28 +78,27 @@ export default function HomePage() {
         </div>
 
         <style jsx>{`
-    @keyframes slide2 {
-      0%, 33.33% { opacity: 0; }
-      33.34%, 66.66% { opacity: 1; }
-      66.67%, 100% { opacity: 0; }
-    }
-    
-    @keyframes slide3 {
-      0%, 66.66% { opacity: 0; }
-      66.67%, 99.99% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-    
-    .animate-slide2 {
-      animation: slide2 9s infinite;
-    }
-    
-    .animate-slide3 {
-      animation: slide3 9s infinite;
-    }
-  `}</style>
+          @keyframes slide2 {
+            0%, 33.33% { opacity: 0; }
+            33.34%, 66.66% { opacity: 1; }
+            66.67%, 100% { opacity: 0; }
+          }
+          
+          @keyframes slide3 {
+            0%, 66.66% { opacity: 0; }
+            66.67%, 99.99% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+          
+          .animate-slide2 {
+            animation: slide2 9s infinite;
+          }
+          
+          .animate-slide3 {
+            animation: slide3 9s infinite;
+          }
+        `}</style>
       </div>
-
 
       {/* Features Section */}
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -208,36 +206,36 @@ export default function HomePage() {
         </div>
       </div>
 
-     {/* Popular Brands */}
-<div className="max-w-7xl mx-auto px-4 py-12">
-  <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Popular Brands</h2>
-  <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-    {[
-      { name: 'Toyota', logo: 'https://up.yimg.com/ib/th/id/OIP.Kbp3gng1wI1tWSFALCvvVQHaFC?pid=Api&rs=1&c=1&qlt=95&w=158&h=107' },
-      { name: 'Honda', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Honda.svg/2560px-Honda.svg.png' },
-      { name: 'Suzuki', logo: 'https://up.yimg.com/ib/th/id/OIP.HjQtuTJ8MSIuW9ge9ccJxQHaHa?pid=Api&rs=1&c=1&qlt=95&w=71&h=71' },
-      { name: 'Mercedes', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/2048px-Mercedes-Logo.svg.png' },
-      { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/2048px-BMW.svg.png' },
-      { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/2048px-Audi-Logo_2016.svg.png' }
-    ].map((brand) => (
-      <a
-        key={brand.name}
-        href={`/buy?brand=${brand.name.toLowerCase()}`}
-        className="bg-white p-4 rounded-xl shadow text-center hover:shadow-lg transition-shadow group"
-      >
-        <div className="mb-2 flex justify-center">
-          <img 
-            src={brand.logo} 
-            alt={`${brand.name} logo`}
-            className="h-10 object-contain"
-          />
+      {/* Popular Brands */}
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Popular Brands</h2>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+          {[
+            { name: 'Toyota', logo: 'https://up.yimg.com/ib/th/id/OIP.Kbp3gng1wI1tWSFALCvvVQHaFC?pid=Api&rs=1&c=1&qlt=95&w=158&h=107' },
+            { name: 'Honda', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Honda.svg/2560px-Honda.svg.png' },
+            { name: 'Suzuki', logo: 'https://up.yimg.com/ib/th/id/OIP.HjQtuTJ8MSIuW9ge9ccJxQHaHa?pid=Api&rs=1&c=1&qlt=95&w=71&h=71' },
+            { name: 'Mercedes', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/2048px-Mercedes-Logo.svg.png' },
+            { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/2048px-BMW.svg.png' },
+            { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/2048px-Audi-Logo_2016.svg.png' }
+          ].map((brand) => (
+            <a
+              key={brand.name}
+              href={`/buy?brand=${brand.name.toLowerCase()}`}
+              className="bg-white p-4 rounded-xl shadow text-center hover:shadow-lg transition-shadow group"
+            >
+              <div className="mb-2 flex justify-center">
+                <img 
+                  src={brand.logo} 
+                  alt={`${brand.name} logo`}
+                  className="h-10 object-contain"
+                />
+              </div>
+              <h3 className="font-bold text-gray-900">{brand.name}</h3>
+              <p className="text-sm text-gray-600">View Listings</p>
+            </a>
+          ))}
         </div>
-        <h3 className="font-bold text-gray-900">{brand.name}</h3>
-        <p className="text-sm text-gray-600">View Listings</p>
-      </a>
-    ))}
-  </div>
-</div>
+      </div>
 
       {/* Sponsored Ads Section */}
       <AdsSection
@@ -261,12 +259,9 @@ export default function HomePage() {
             className="inline-block bg-white text-orange-600 font-bold px-8 py-4 rounded-xl hover:shadow-xl transition-all hover:scale-105"
           >
             Post Your Ad Now
-            
           </a>
         </div>
       </div>
-  
-<Footer />
     </div>
   )
 }

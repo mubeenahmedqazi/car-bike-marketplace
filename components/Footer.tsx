@@ -103,7 +103,7 @@ export default function Footer() {
                 </div>
               </div>
               <div>
-                <h2 className="text-2xl font-bold">AutoBazaar</h2>
+                <h2 className="text-2xl font-bold">CAR-BIKE MARKETPLACE</h2>
                 <p className="text-sm text-gray-400">Pakistan's #1 Automotive Marketplace</p>
               </div>
             </div>
@@ -138,17 +138,14 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links - REMOVED EXTRA LINKS */}
           <div>
             <h3 className="text-lg font-bold mb-6 text-white">Quick Links</h3>
             <ul className="space-y-3">
               {[
-                { label: "Buy Car", href: "/cars" },
-                { label: "Buy Bike", href: "/bikes" },
+                { label: "Buy", href: "/buy" },
                 { label: "Sell Vehicle", href: "/sell" },
-                { label: "Featured Ads", href: "/featured" },
-                { label: "Urgent Sale", href: "/urgent" },
-                { label: "New Arrivals", href: "/new" },
+                { label: "Featured Ads", href: "/buy?type=featured" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link 
@@ -163,17 +160,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Resources - REMOVED BLOG & HELP CENTER */}
           <div>
             <h3 className="text-lg font-bold mb-6 text-white">Resources</h3>
             <ul className="space-y-3">
               {[
                 { label: "About Us", href: "/about" },
-                { label: "Blog & Guides", href: "/blog" },
-                { label: "Help Center", href: "/help" },
-                { label: "Privacy Policy", href: "/privacy" },
-                { label: "Terms of Service", href: "/terms" },
-                { label: "Contact Us", href: "/contact" },
+                { label: "Privacy Policy", href: "/privacy-policy" },
+                { label: "Terms of Service", href: "/terms-of-service" },
+                { label: "Contact Us", href: "/contact-us" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link 
@@ -203,7 +198,7 @@ export default function Footer() {
                 <Mail size={18} className="text-orange-400 mt-1" />
                 <div>
                   <div className="text-gray-400 text-sm">Email</div>
-                  <div className="font-semibold">support@autobazaar.com</div>
+                  <div className="font-semibold">support@carbikemarketplace.pk</div>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -265,9 +260,9 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-500 text-sm text-center md:text-left">
-              &copy; {new Date().getFullYear()} AutoBazaar Pakistan. All rights reserved.
+              &copy; {new Date().getFullYear()} CAR-BIKE MARKETPLACE. All rights reserved.
               <span className="mx-2">•</span>
-              <span className="text-gray-400">A product of Tech Innovations Pvt Ltd.</span>
+              <span className="text-gray-400">Pakistan's #1 Automotive Platform</span>
             </div>
             
             <div className="flex items-center gap-6">
