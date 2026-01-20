@@ -94,7 +94,7 @@ export default function MyAdsPage() {
                 console.log("📝 Number of ads:", data.ads?.length || 0)
 
                 setAds(data.ads || [])
-                setDebugInfo(prev => ({
+                setDebugInfo((prev: any) => ({
                     ...prev,
                     apiResponse: data,
                     adsCount: data.ads?.length || 0
@@ -103,7 +103,7 @@ export default function MyAdsPage() {
                 const errorText = await adsRes.text()
                 console.error("❌ Ads fetch failed:", errorText)
                 setError(`Failed to fetch ads: ${adsRes.status}`)
-                setDebugInfo(prev => ({
+                setDebugInfo((prev: any) => ({
                     ...prev,
                     error: errorText
                 }))
@@ -293,7 +293,7 @@ export default function MyAdsPage() {
             )}
 
             {/* Header */}
-            <div className="bg-gradient-to-r from-red-600 to-red-700 text-white">
+            <div className="bg-gradient-to-r from-orange-600 to-red-500 text-white">
                 <div className="max-w-7xl mx-auto px-4 py-8">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div>
@@ -308,12 +308,7 @@ export default function MyAdsPage() {
                                 <Car className="w-5 h-5" />
                                 Post New Ad
                             </Link>
-                            <Link
-                                href="/dashboard"
-                                className="bg-white/20 backdrop-blur-sm text-white font-medium px-6 py-3 rounded-lg hover:bg-white/30 transition-colors"
-                            >
-                                Dashboard
-                            </Link>
+                           
                         </div>
                     </div>
                 </div>
@@ -578,7 +573,7 @@ export default function MyAdsPage() {
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteAd(ad._id)}
-                                                    className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 text-sm font-medium rounded-lg transition-colors"
+                                                    className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-red-600 hover:bg-red-100 text-sm font-medium rounded-lg transition-colors"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                     Delete

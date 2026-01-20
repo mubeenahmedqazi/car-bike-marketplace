@@ -488,15 +488,7 @@ export default function Header() {
                               <span>My Ads</span>
                             </Link>
                             
-                            <Link 
-                              href="/dashboard" 
-                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                              onClick={() => setIsUserMenuOpen(false)}
-                            >
-                              <TrendingUp size={18} />
-                              <span>My Dashboard</span>
-                            </Link>
-                            
+                           
                             <Link 
                               href="/my-profile" 
                               className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"

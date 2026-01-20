@@ -1,3 +1,4 @@
+// models/User.js
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
@@ -29,6 +30,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a city'],
   },
+  profilePicture: {
+    type: String,
+    default: ''
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],
@@ -46,9 +51,19 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+}, {
+  // Add these options
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
-// NO PRE-SAVE MIDDLEWARE AT ALL
-// NO next() function calls anywhere
+// Add this to ensure profilePicture is always included
+UserSchema.set('toJSON', {
+  transform: function(doc, ret) {
+    // Ensure profilePicture is included
+    ret.profilePicture = ret.profilePicture || '';
+    return ret;
+  }
+});
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);
