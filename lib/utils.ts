@@ -227,24 +227,7 @@ export function getCurrentYear(): number {
   return new Date().getFullYear()
 }
 
-// Sort array of objects
-export function sortBy<T>(array: T[], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
-  return [...array].sort((a, b) => {
-    let aVal = a[key]
-    let bVal = b[key]
-    
-    if (typeof aVal === 'string' && typeof bVal === 'string') {
-      aVal = aVal.toLowerCase()
-      bVal = bVal.toLowerCase()
-    }
-    
-    if (order === 'asc') {
-      return aVal > bVal ? 1 : -1
-    } else {
-      return aVal < bVal ? 1 : -1
-    }
-  })
-}
+
 
 // Group array by key
 export function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
