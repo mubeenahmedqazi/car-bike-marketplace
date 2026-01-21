@@ -165,14 +165,18 @@ export default function HomePage() {
       />
 
       {/* Popular Categories */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-15 py-12">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Popular Categories</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <a
             href="/buy?category=car"
             className="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow group"
           >
-            <div className="text-4xl mb-3">🚗</div>
+            <img
+              src="https://up.yimg.com/ib/th/id/OIP.uYtNceaqL7QH-Ws-UJlFbwHaEo?pid=Api&rs=1&c=1&qlt=95&w=171&h=107"
+              alt="Car"
+              className="mx-auto block"
+            />
             <h3 className="text-xl font-bold text-gray-900 mb-2">Cars</h3>
             <p className="text-gray-600">Browse 1,200+ listings</p>
           </a>
@@ -181,28 +185,18 @@ export default function HomePage() {
             href="/buy?category=bike"
             className="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow group"
           >
-            <div className="text-4xl mb-3">🏍️</div>
+            <img
+              src="https://up.yimg.com/ib/th/id/OIP.LWnnpH58I4c1Kd6oWxR_tAHaHa?pid=Api&rs=1&c=1&qlt=95&w=124&h=124"
+              alt="Bike"
+              className="mx-auto block"
+            />
             <h3 className="text-xl font-bold text-gray-900 mb-2">Bikes</h3>
             <p className="text-gray-600">Browse 800+ listings</p>
           </a>
 
-          <a
-            href="/buy?category=suv"
-            className="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow group"
-          >
-            <div className="text-4xl mb-3">🚙</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">SUVs</h3>
-            <p className="text-gray-600">Browse 300+ listings</p>
-          </a>
+          
 
-          <a
-            href="/buy?category=truck"
-            className="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow group"
-          >
-            <div className="text-4xl mb-3">🚚</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Trucks</h3>
-            <p className="text-gray-600">Browse 200+ listings</p>
-          </a>
+         
         </div>
       </div>
 
@@ -224,8 +218,8 @@ export default function HomePage() {
               className="bg-white p-4 rounded-xl shadow text-center hover:shadow-lg transition-shadow group"
             >
               <div className="mb-2 flex justify-center">
-                <img 
-                  src={brand.logo} 
+                <img
+                  src={brand.logo}
                   alt={`${brand.name} logo`}
                   className="h-10 object-contain"
                 />

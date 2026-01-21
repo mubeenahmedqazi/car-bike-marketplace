@@ -205,7 +205,7 @@ useEffect(() => {
           document.querySelector(".success-animation")?.classList.remove("active")
           
           // Redirect to dashboard
-          router.push('/dashboard')
+          router.push('/my-ads')
         }, 1500)
       } else {
         alert("Error: " + (data.message || data.error || "Unknown error"))
@@ -244,7 +244,7 @@ useEffect(() => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
       </div>
     )
   }
@@ -272,7 +272,7 @@ useEffect(() => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                <Shield className="text-red-600" size={24} />
+                <Shield className="text-orange-600" size={24} />
               </div>
               <div>
                 <h3 className="font-bold text-gray-900">Hello, {user?.name}!</h3>
@@ -290,11 +290,11 @@ useEffect(() => {
         <div className="mb-10">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Post Your Vehicle Ad</h1>
-            <div className="text-lg font-semibold text-red-600">{progress}% Complete</div>
+            <div className="text-lg font-semibold text-orange-600">{progress}% Complete</div>
           </div>
           <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-red-500 to-red-600 transition-all duration-500 ease-out"
+              className="h-full bg-gradient-to-r from-orange-600 to-red-500 transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -310,12 +310,12 @@ useEffect(() => {
               <button
                 key={index}
                 className={`flex-1 py-5 text-center font-medium text-lg transition-all duration-300 ${currentSection === index 
-                  ? "bg-red-50 text-red-700 border-b-2 border-red-600" 
+                  ? "bg-red-50 text-orange-600 border-b-2 border-red-500" 
                   : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}
                 onClick={() => setCurrentSection(index)}
               >
                 <span className="flex items-center justify-center gap-2">
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center ${currentSection === index ? "bg-red-600 text-white" : "bg-gray-200 text-gray-600"}`}>
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center ${currentSection === index ? "bg-orange-600 text-white" : "bg-gray-200 text-gray-600"}`}>
                     {index + 1}
                   </span>
                   {tab}
@@ -337,7 +337,7 @@ useEffect(() => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                       <label className="block text-gray-800 font-medium mb-3 text-lg">
-                        Ad Title <span className="text-red-500">*</span>
+                        Ad Title <span className="text-orange-500">*</span>
                       </label>
                       <input
                         name="title"
@@ -352,13 +352,13 @@ useEffect(() => {
 
                     <div>
                       <label className="block text-gray-800 font-medium mb-3 text-lg">
-                        Vehicle Type <span className="text-red-500">*</span>
+                        Vehicle Type <span className="text-orange-500">*</span>
                       </label>
                       <div className="flex gap-4">
                         <button
                           type="button"
                           className={`flex-1 py-4 rounded-xl border-2 text-center font-medium transition-all duration-300 ${form.vehicleType === "Car" 
-                            ? "border-red-500 bg-red-50 text-red-700" 
+                            ? "border-orange-600 bg-red-50 text-red-500" 
                             : "border-gray-300 hover:border-gray-400 text-gray-700"}`}
                           onClick={() => setForm({...form, vehicleType: "Car"})}
                         >
@@ -370,7 +370,7 @@ useEffect(() => {
                         <button
                           type="button"
                           className={`flex-1 py-4 rounded-xl border-2 text-center font-medium transition-all duration-300 ${form.vehicleType === "Bike" 
-                            ? "border-red-500 bg-red-50 text-red-700" 
+                            ? "border-orange-500 bg-red-50 text-red-700" 
                             : "border-gray-300 hover:border-gray-400 text-gray-700"}`}
                           onClick={() => setForm({...form, vehicleType: "Bike"})}
                         >

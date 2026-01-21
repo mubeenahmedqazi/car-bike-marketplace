@@ -771,7 +771,7 @@ export default function Header() {
                             className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl text-gray-700 text-left"
                           >
                             <span>{brand.name}</span>
-                            <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">
+                            <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
                               {formatAdCount(brand.totalAds)}
                             </span>
                           </button>

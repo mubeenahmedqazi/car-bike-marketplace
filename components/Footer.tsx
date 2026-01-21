@@ -48,7 +48,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-orange-600 to-red-600">
+      <div className="bg-gradient-to-r from-orange-600 to-red-500">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
@@ -67,7 +67,7 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-white/30 focus:outline-none text-gray-900 w-full md:w-80"
+                className="px-6 py-3 rounded-xl border-0 focus:ring-2 focus:ring-black/30 focus:outline-none text-white-900 w-full md:w-80"
                 required
               />
               <button

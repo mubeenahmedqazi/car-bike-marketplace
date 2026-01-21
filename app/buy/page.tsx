@@ -69,11 +69,10 @@ function BuyPageContent() {
   const cities = ["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Sialkot","Gujranwala"]
   const brands = ["Toyota","Honda","Suzuki","Mercedes","BMW","Audi","Hyundai","Kia","Ford","Nissan","Mitsubishi","Chevrolet"]
   const categories = [
-    { value: "all", label: "All Vehicles", icon: "🚗" },
-    { value: "car", label: "Cars", icon: "🚗" },
-    { value: "bike", label: "Bikes", icon: "🏍️" },
-    { value: "suv", label: "SUVs", icon: "🚙" },
-    { value: "truck", label: "Trucks", icon: "🚚" }
+    { value: "all", label: "All Vehicles" },
+    { value: "car", label: "Cars" },
+    { value: "bike", label: "Bikes" }
+    
   ]
 
   // Fetch ads whenever filters/page change
@@ -138,7 +137,7 @@ function BuyPageContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero + Search */}
-      <div className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white">
+      <div className="bg-gradient-to-r from-orange-600 via-red-500 to-orange-600 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{selectedBrand !== "all" ? `${selectedBrand} Vehicles` : "Find Your Perfect Vehicle"}</h1>
           <p className="text-lg md:text-xl opacity-90 mb-8">{selectedBrand !== "all" ? `Browse all ${selectedBrand} vehicles available` : "Browse thousands of verified cars, bikes, and more"}</p>
@@ -152,7 +151,7 @@ function BuyPageContent() {
               </div>
               <div className="flex gap-2">
                 <select value={selectedCategory} onChange={(e)=>handleCategoryChange(e.target.value)} className="px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border-0 focus:ring-2 focus:ring-orange-500 outline-none">
-                  {categories.map(cat => <option key={cat.value} value={cat.value}>{cat.icon} {cat.label}</option>)}
+                  {categories.map(cat => <option key={cat.value} value={cat.value}> {cat.label}</option>)}
                 </select>
                 <button type="button" onClick={()=>setShowFilters(!showFilters)} className="px-4 py-3 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2">
                   <Filter size={20} /> Filters {showFilters ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}

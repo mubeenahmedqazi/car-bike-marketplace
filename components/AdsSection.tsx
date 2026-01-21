@@ -407,7 +407,7 @@ function AdCard({ ad, formatPrice, formatDate, isSaved, onSave }: any) {
         >
           <Heart 
             size={20} 
-            className={isSaved ? "fill-red-500 text-red-500" : "text-gray-600"} 
+            className={isSaved ? "fill-orange-600 text-red-500" : "text-gray-600"} 
           />
         </button>
         
@@ -420,7 +420,7 @@ function AdCard({ ad, formatPrice, formatDate, isSaved, onSave }: any) {
         
         {/* Urgent Badge */}
         {ad.status === 'urgent' && (
-          <div className="absolute bottom-3 right-3 px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg">
+          <div className="absolute bottom-3 right-3 px-3 py-1 bg-gradient-to-r from-orange-600 to-red-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg">
             <Zap size={10} />
             URGENT
           </div>
@@ -480,7 +480,7 @@ function AdCard({ ad, formatPrice, formatDate, isSaved, onSave }: any) {
               View Details
             </button>
           </Link>
-          <button className="px-4 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:shadow-lg transition-all hover:scale-105">
+          <button className="px-4 py-2.5 bg-gradient-to-r from-orange-600 to-red-500 text-white rounded-lg font-medium hover:shadow-lg transition-all hover:scale-105">
             Contact
           </button>
         </div>
