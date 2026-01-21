@@ -9,6 +9,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "CAR-BIKE MARKETPLACE",
   description: "Buy and sell cars and bikes",
+  // Add this single line for favicon
+  icons: {
+    icon: "/LOGO.png",
+  },
 }
 
 export default function RootLayout({
