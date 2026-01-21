@@ -205,7 +205,7 @@ export default function Footer() {
                 <MapPin size={18} className="text-orange-400 mt-1" />
                 <div>
                   <div className="text-gray-400 text-sm">Head Office</div>
-                  <div className="font-semibold">Karachi, Pakistan</div>
+                  <div className="font-semibold">Lahore, Pakistan</div>
                 </div>
               </li>
             </ul>

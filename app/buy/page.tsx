@@ -137,7 +137,7 @@ function BuyPageContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero + Search */}
-      <div className="bg-gradient-to-r from-orange-600 via-red-500 to-orange-600 text-white">
+      <div className="bg-gradient-to-r from-orange-600 to-red-500 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{selectedBrand !== "all" ? `${selectedBrand} Vehicles` : "Find Your Perfect Vehicle"}</h1>
           <p className="text-lg md:text-xl opacity-90 mb-8">{selectedBrand !== "all" ? `Browse all ${selectedBrand} vehicles available` : "Browse thousands of verified cars, bikes, and more"}</p>
@@ -156,7 +156,7 @@ function BuyPageContent() {
                 <button type="button" onClick={()=>setShowFilters(!showFilters)} className="px-4 py-3 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2">
                   <Filter size={20} /> Filters {showFilters ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}
                 </button>
-                <button type="submit" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+                <button type="submit" className="px-6 py-3 bg-gradient-to-r from-orange-600 to-red-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
                   <Search size={20}/> Search
                 </button>
               </div>

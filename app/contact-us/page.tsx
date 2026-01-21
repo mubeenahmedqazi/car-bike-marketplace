@@ -99,9 +99,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-1">Visit Us</h3>
-                    <p className="text-gray-600">Karachi Office</p>
+                    <p className="text-gray-600">Lahore Office</p>
                     <p className="text-gray-600 text-sm">123 Auto Street,</p>
-                    <p className="text-gray-600 text-sm">Karachi, Pakistan</p>
+                    <p className="text-gray-600 text-sm">Lahore, Pakistan</p>
                   </div>
                 </div>
 
@@ -287,7 +287,7 @@ export default function ContactPage() {
                       Can I visit your office in person?
                     </h4>
                     <p className="text-gray-600 text-sm">
-                      Yes, our Karachi office is open Monday through Friday from 9 AM to 7 PM. 
+                      Yes, our Lahore office is open Monday through Friday from 9 AM to 7 PM. 
                       Please call ahead to schedule an appointment.
                     </p>
                   </div>
@@ -297,7 +297,7 @@ export default function ContactPage() {
                       Do you have regional offices?
                     </h4>
                     <p className="text-gray-600 text-sm">
-                      Currently, our main office is in Karachi. We're planning to open offices in 
+                      Currently, our main office is in Lahore. We're planning to open offices in 
                       Lahore and Islamabad soon.
                     </p>
                   </div>
@@ -314,14 +314,14 @@ export default function ContactPage() {
           <div className="p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Find Us</h2>
             <p className="text-gray-600 mb-6">
-              Visit our headquarters in Karachi. We're located in the heart of the city.
+              Visit our headquarters in Lahore. We're located in the heart of the city.
             </p>
           </div>
           <div className="h-96 bg-gray-200 flex items-center justify-center">
             <div className="text-center">
               <div className="text-5xl mb-4">📍</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Karachi Office</h3>
-              <p className="text-gray-600">123 Auto Street, Karachi, Pakistan</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Lahore Office</h3>
+              <p className="text-gray-600">123 Auto Street, Lahore, Pakistan</p>
               <p className="text-gray-500 text-sm mt-2">Map integration available soon</p>
             </div>
           </div>

@@ -288,7 +288,7 @@ export default function PrivacyPolicyPage() {
               <div className="space-y-2">
                 <p><strong>Email:</strong> privacy@carbikemarketplace.pk</p>
                 <p><strong>Phone:</strong> 0300-CAR-BIKE</p>
-                <p><strong>Address:</strong> Karachi, Pakistan</p>
+                <p><strong>Address:</strong> Lahore, Pakistan</p>
               </div>
               
               <p className="text-sm text-gray-600 mt-4">

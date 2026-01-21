@@ -280,7 +280,7 @@ export default function MyAdsPage() {
                             <pre className="overflow-auto max-h-64">
                                 {JSON.stringify(debugInfo, null, 2)}
                             </pre>
-                            {error && <p className="text-red-600 mt-2">Error: {error}</p>}
+                            {error && <p className="text-orange-600 mt-2">Error: {error}</p>}
                             <button
                                 onClick={fetchMyAds}
                                 className="mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
@@ -303,7 +303,7 @@ export default function MyAdsPage() {
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/sell"
-                                className="bg-white text-red-500 font-semibold px-6 py-3 rounded-lg hover:bg-orange-50 transition-colors flex items-center gap-2"
+                                className="bg-white text-orange-500 font-semibold px-6 py-3 rounded-lg hover:bg-orange-50 transition-colors flex items-center gap-2"
                             >
                                 <Car className="w-5 h-5" />
                                 Post New Ad
@@ -404,7 +404,7 @@ export default function MyAdsPage() {
                                     placeholder="Search your ads..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                                 />
                             </div>
                         </div>
@@ -415,7 +415,7 @@ export default function MyAdsPage() {
                                 <select
                                     value={statusFilter}
                                     onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                                 >
                                     <option value="all">All Status</option>
                                     <option value="active">Active</option>
@@ -427,7 +427,7 @@ export default function MyAdsPage() {
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                             >
                                 <option value="newest">Newest First</option>
                                 <option value="oldest">Oldest First</option>
@@ -457,7 +457,7 @@ export default function MyAdsPage() {
                             </p>
                             <Link
                                 href="/sell"
-                                className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium px-8 py-4 rounded-xl hover:shadow-xl transition-all"
+                                className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium px-8 py-4 rounded-xl hover:shadow-xl transition-all"
                             >
                                 <Car className="w-5 h-5" />
                                 {ads.length === 0 ? 'Create Your First Ad' : 'Post New Ad'}
@@ -573,7 +573,7 @@ export default function MyAdsPage() {
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteAd(ad._id)}
-                                                    className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-red-600 hover:bg-orange-100 text-sm font-medium rounded-lg transition-colors"
+                                                    className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-orange-600 hover:bg-orange-100 text-sm font-medium rounded-lg transition-colors"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                     Delete
@@ -593,7 +593,7 @@ export default function MyAdsPage() {
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Ads Performance</h3>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div className="text-center">
-                                <div className="text-3xl font-bold text-red-600">{stats.total}</div>
+                                <div className="text-3xl font-bold text-orange-600">{stats.total}</div>
                                 <div className="text-sm text-gray-600">Total Ads</div>
                             </div>
                             <div className="text-center">

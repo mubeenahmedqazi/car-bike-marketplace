@@ -283,7 +283,7 @@ export default function Header() {
   return (
     <>
       {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm py-2 px-4">
+      <div className="bg-gradient-to-r from-orange-600 to-red-500 text-white text-sm py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Phone size={14} />
@@ -416,7 +416,7 @@ export default function Header() {
                 
                 <button
                   onClick={handleSellClick}
-                  className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2.5 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
+                  className="flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-500 text-white px-5 py-2.5 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />

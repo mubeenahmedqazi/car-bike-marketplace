@@ -514,7 +514,7 @@ export default function Filters({
       {/* Apply Filters Button */}
       <button
         onClick={() => {}} // This would typically refresh the results
-        className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+        className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-70 disabled:cursor-not-allowed"
         disabled={loading}
       >
         {loading ? (
