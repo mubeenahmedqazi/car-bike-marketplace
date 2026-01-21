@@ -45,8 +45,8 @@ function SignInPage() {
 
       if (!response.ok) throw new Error(data.error || "Login failed");
 
-      router.push(redirect);
-      router.refresh();
+      // Force full page reload and redirect to home
+      window.location.href = "/";
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -69,8 +69,8 @@ function SignInPage() {
         <div className="bg-white rounded-2xl shadow-lg p-8">
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="text-red-600 mt-1" size={20} />
-              <p className="text-red-800">{error}</p>
+              <AlertCircle className="text-orange-600 mt-1" size={20} />
+              <p className="text-orange-600">{error}</p>
             </div>
           )}
 
@@ -85,7 +85,7 @@ function SignInPage() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
                 placeholder="Enter your email"
               />
             </div>
@@ -101,7 +101,7 @@ function SignInPage() {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition pr-12"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition pr-12"
                   placeholder="Enter your password"
                 />
                 <button
@@ -120,13 +120,13 @@ function SignInPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                   Remember me
                 </label>
               </div>
-              <a href="#" className="text-sm font-medium text-red-600 hover:text-red-500">
+              <a href="#" className="text-sm font-medium text-orange-600 hover:text-orange-500">
                 Forgot password?
               </a>
             </div>
@@ -134,7 +134,7 @@ function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -149,7 +149,7 @@ function SignInPage() {
 
           <p className="mt-8 text-center text-sm text-gray-600">
             Don't have an account?{" "}
-            <Link href="/signup" className="font-medium text-red-600 hover:text-red-500">
+            <Link href="/signup" className="font-medium text-orange-600 hover:text-orange-500">
               Sign up now
             </Link>
           </p>

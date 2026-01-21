@@ -154,7 +154,7 @@ export default function MyAdsPage() {
                 )
             case 'rejected':
                 return (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                         <XCircle className="w-3 h-3 mr-1" />
                         Rejected
                     </span>
@@ -303,7 +303,7 @@ export default function MyAdsPage() {
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/sell"
-                                className="bg-white text-red-600 font-semibold px-6 py-3 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2"
+                                className="bg-white text-red-500 font-semibold px-6 py-3 rounded-lg hover:bg-orange-50 transition-colors flex items-center gap-2"
                             >
                                 <Car className="w-5 h-5" />
                                 Post New Ad
@@ -319,8 +319,8 @@ export default function MyAdsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                     <div className="bg-white rounded-xl shadow-lg p-4 border border-gray-200">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                <BarChart3 className="text-red-600" size={20} />
+                            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <BarChart3 className="text-orange-600" size={20} />
                             </div>
                             <div>
                                 <p className="text-sm text-gray-600">Total Ads</p>
@@ -573,7 +573,7 @@ export default function MyAdsPage() {
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteAd(ad._id)}
-                                                    className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-red-600 hover:bg-red-100 text-sm font-medium rounded-lg transition-colors"
+                                                    className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-red-600 hover:bg-orange-100 text-sm font-medium rounded-lg transition-colors"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                     Delete
