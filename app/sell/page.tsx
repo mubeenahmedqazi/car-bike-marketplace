@@ -678,7 +678,7 @@ useEffect(() => {
                 <button
                   type="button"
                   onClick={nextSection}
-                  className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="px-10 py-4 bg-gradient-to-r from-orange-600 to-red-500 text-white font-medium rounded-xl hover:from-orange-600 hover:to-red-500 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Continue →
                 </button>
@@ -686,7 +686,7 @@ useEffect(() => {
                 <button
                   type="submit"
                   disabled={isSubmitting || !isFormValid()}
-                  className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-3"
+                  className="px-10 py-4 bg-gradient-to-r from-orange-600 to-red-500 text-white font-medium rounded-xl hover:from-orange-600 hover:to-red-500 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-3"
                 >
                   {isSubmitting ? (
                     <>

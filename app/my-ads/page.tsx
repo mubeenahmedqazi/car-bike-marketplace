@@ -564,13 +564,7 @@ export default function MyAdsPage() {
                                                     <Eye className="w-4 h-4" />
                                                     View Details
                                                 </button>
-                                                <button
-                                                    onClick={() => handleEditAd(ad._id)}
-                                                    className="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 text-sm font-medium rounded-lg transition-colors"
-                                                >
-                                                    <Edit2 className="w-4 h-4" />
-                                                    Edit
-                                                </button>
+                                                
                                                 <button
                                                     onClick={() => handleDeleteAd(ad._id)}
                                                     className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-orange-600 hover:bg-orange-100 text-sm font-medium rounded-lg transition-colors"

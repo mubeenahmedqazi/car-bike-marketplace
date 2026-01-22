@@ -498,28 +498,14 @@ export default function Header() {
                               <span>My Profile</span>
                             </Link>
                             
-                            <Link 
-                              href="/saved" 
-                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                              onClick={() => setIsUserMenuOpen(false)}
-                            >
-                              <Heart size={18} />
-                              <span>Saved Vehicles</span>
-                            </Link>
+                            
                           </>
                         )}
                       </div>
                       
                       {/* Help & Logout */}
                       <div className="border-t border-gray-100 pt-2">
-                        <Link 
-                          href="/help" 
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition-colors"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <HelpCircle size={18} />
-                          <span>Help Center</span>
-                        </Link>
+                       
                         
                         {isLoggedIn && (
                           <button

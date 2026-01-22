@@ -132,8 +132,7 @@ export default function AdsSection({
         setSavedAds([...savedAds, adId])
       }
       
-      // In a real app, you would make an API call here
-      // await fetch(`/api/ads/${adId}/save`, { method: 'POST' })
+      
     } catch (err) {
       console.error('Error saving ad:', err)
     }
@@ -172,10 +171,10 @@ export default function AdsSection({
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <p className="text-red-600">{error}</p>
+          <p className="text-orange-600">{error}</p>
           <button 
             onClick={fetchAds}
-            className="mt-3 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+            className="mt-3 px-4 py-2 bg-red-100 text-orange-600 rounded-lg hover:bg-red-200 transition-colors"
           >
             Retry
           </button>
@@ -188,15 +187,15 @@ export default function AdsSection({
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-          {getSectionIcon(type)}
+          
           {title}
         </h2>
         <div className="bg-gray-50 rounded-2xl p-12 text-center">
-          <div className="text-5xl mb-4">🚗</div>
+          <div className="text-5xl mb-4"></div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">No ads found</h3>
           <p className="text-gray-500 mb-6">Check back later for new listings</p>
           <Link href="/sell">
-            <button className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all">
+            <button className="px-6 py-3 bg-gradient-to-r from-orange-600 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all">
               Be the first to post!
             </button>
           </Link>
@@ -210,8 +209,8 @@ export default function AdsSection({
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <div className="flex items-center gap-3 mb-4 sm:mb-0">
-          <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl">
-            {getSectionIcon(type, true)}
+          <div className="">
+            
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
@@ -381,35 +380,25 @@ function AdCard({ ad, formatPrice, formatDate, isSaved, onSave }: any) {
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {ad.isFeatured && (
             <div className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg">
-              <Star size={10} />
+              
               FEATURED
             </div>
           )}
           {ad.isSponsored && (
             <div className="px-3 py-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg">
-              <TrendingUp size={10} />
+              
               SPONSORED
             </div>
           )}
           {ad.isVerified && (
             <div className="px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg">
-              <Shield size={10} />
+              
               VERIFIED
             </div>
           )}
         </div>
         
-        {/* Save Button */}
-        <button
-          onClick={onSave}
-          className="absolute top-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 shadow-lg"
-          aria-label={isSaved ? "Remove from saved" : "Save ad"}
-        >
-          <Heart 
-            size={20} 
-            className={isSaved ? "fill-orange-600 text-red-500" : "text-gray-600"} 
-          />
-        </button>
+        
         
         {/* Price Tag */}
         <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -523,26 +512,7 @@ function AdsSectionSkeleton({ title }: { title: string }) {
   )
 }
 
-// Helper Functions
-function getSectionIcon(type: string, large = false) {
-  const size = large ? 24 : 20
-  switch (type) {
-    case 'featured':
-      return <Star size={size} className="text-yellow-500" />
-    case 'sponsored':
-      return <TrendingUp size={size} className="text-purple-500" />
-    case 'trending':
-      return <Zap size={size} className="text-red-500" />
-    case 'latest':
-      return <Calendar size={size} className="text-blue-500" />
-    case 'budget':
-      return <span className="text-xl">💰</span>
-    case 'random':
-      return <Dice5 size={size} className="text-orange-500" />
-    default:
-      return <Car size={size} className="text-orange-500" />
-  }
-}
+
 
 function getSectionDescription(type: string) {
   switch (type) {
