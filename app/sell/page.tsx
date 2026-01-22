@@ -200,7 +200,7 @@ useEffect(() => {
         })
         
         setTimeout(() => {
-          alert(`Ad posted successfully! ID: ${data.adId}`)
+          
           setIsSubmitting(false)
           document.querySelector(".success-animation")?.classList.remove("active")
           
@@ -263,7 +263,7 @@ useEffect(() => {
               <CheckCircle className="w-14 h-14 text-green-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Ad Posted Successfully!</h3>
-            <p className="text-gray-600">Your vehicle listing is now pending approval.</p>
+            
           </div>
         </div>
 
